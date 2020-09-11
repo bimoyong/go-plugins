@@ -1,4 +1,4 @@
-module github.com/micro/go-plugins/logger/zap/v2
+module github.com/bimoyong/go-plugins/logger/zap/v2
 
 go 1.13
 

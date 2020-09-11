@@ -31,6 +31,18 @@ func WithEncoderConfig(c zapcore.EncoderConfig) logger.Option {
 	return logger.SetOption(encoderConfigKey{}, c)
 }
 
+type coreKey struct{}
+
+// WithCore pass zap.Core to logger
+func WithCore(c zapcore.Core) logger.Option {
+	return logger.SetOption(coreKey{}, c)
+}
+
+// WithCores pass slice of zap.Core to logger
+func WithCores(c ...zapcore.Core) logger.Option {
+	return logger.SetOption(coreKey{}, zapcore.NewTee(c...))
+}
+
 type namespaceKey struct{}
 
 func WithNamespace(namespace string) logger.Option {

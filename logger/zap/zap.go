@@ -48,9 +48,19 @@ func (l *zaplog) Init(opts ...logger.Option) error {
 		zapConfig.Level.SetLevel(loggerToZapLevel(l.opts.Level))
 	}
 
-	log, err := zapConfig.Build(zap.AddCallerSkip(skip))
-	if err != nil {
-		return err
+	var log *zap.Logger
+	if core, ok := l.opts.Context.Value(coreKey{}).(zapcore.Core); ok {
+		log = zap.New(
+			core,
+			zap.AddCaller(),
+			zap.AddCallerSkip(skip),
+			zap.AddStacktrace(zap.PanicLevel),
+		)
+	} else {
+		log, err = zapConfig.Build(zap.AddCallerSkip(skip))
+		if err != nil {
+			return err
+		}
 	}
 
 	// Adding seed fields if exist
